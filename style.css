@@ -35,7 +35,7 @@ header nav ul li a {
     font-size: 18px;
 }
 
-/* Main Content */
+
 main {
     display: flex;
     flex-wrap: wrap;
@@ -47,7 +47,7 @@ section {
     background-color: #ecf0f1;
     margin: 10px;
     padding: 20px;
-    width: 30%;  /* Default width for larger screens */
+    width: 30%;  
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -59,16 +59,16 @@ footer {
     padding: 10px 20px;
 }
 
-/* Responsive Design */
+
 @media screen and (max-width: 1200px) {
     section {
-        width: 45%;  /* Change to 45% width on medium screens */
+        width: 45%; 
     }
 }
 
 @media screen and (max-width: 768px) {
     section {
-        width: 100%;  /* Full width on smaller screens */
+        width: 100%;  
     }
 
     header nav ul {
@@ -80,7 +80,7 @@ footer {
     }
 }
 
-/* Mobile-specific Styles */
+
 @media screen and (max-width: 480px) {
     header {
         padding: 15px;
@@ -98,5 +98,69 @@ footer {
         padding: 15px;
     }
 }
+/* Hide dropdown by default */
+ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin: 0;
+}
 
+ul li {
+    position: relative;
+}
+
+ul li ul {
+    display: none; 
+    opacity: 0;
+    transition: opacity 0.4s ease-out;
+}
+
+
+ul li.open ul {
+    display: block; 
+    opacity: 1; 
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+}
+
+ul li.open .arrow {
+    transform: rotate(180deg); 
+}
+
+
+#dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 50px; 
+    left: 0;
+    background-color: #333;
+    width: 200px;
+    padding: 10px;
+    list-style-type: none;
+    margin: 0;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    opacity: 0; 
+    transform: translateY(-10px); 
+    transition: opacity 0.3s ease, transform 0.3s ease; 
+}
+
+
+#dropdown-menu.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0); 
+}
+
+
+.hamburger-menu {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+}
 
