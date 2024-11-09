@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.2/main.min.css" rel="stylesheet" />
+    <title>St Lukes</title>
+</head>
+<body class="flex h-screen bg-gray-100">
+
+    <!-- Button -->
+    <button id="toggle-btn" class="p-3 m-3 bg-[#0b57d0] rounded-md md:hidden transition-all duration-300 z-50">
+        <svg class="w-6 h-6 mx-auto text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+    </button>
+
+    <!-- Sidebar -->
+    <div id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-[#0b57d0] text-white transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col">
+        <div class="flex items-center justify-between p-4">
+            <img src="./assets/unnamed.png" alt="Logo" class="max-w-full max-h-24 rounded bg-white p-2">
+            <button id="close-btn" class="md:hidden p-2 text-white rounded">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <ul class="p-4 space-y-4 flex-1">
+            <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">Dashboard</a></li>
+            <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">Patients</a></li>
+            <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">New Entries</a></li>
+            <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">New Assessments</a></li>
+            <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">Schedules</a></li>
+            <li>
+                <button onclick="toggleDropdown('diagnosticsMenu')" class="w-full text-left hover:bg-[#0a47b5] p-2 rounded flex items-center justify-between">
+                    Diagnostics
+                    <span class="transform transition-transform duration-300" id="diagnosticsArrow">▼</span>
+                </button>
+                <ul id="diagnosticsMenu" class="hidden pl-4 space-y-2">
+                    <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">Record Diagnostics</a></li>
+                    <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">DAS28</a></li>
+                    <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">CDAI</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <button onclick="toggleDropdown('laboratoryTestMenu')" class="w-full text-left hover:bg-[#0a47b5] p-2 rounded flex items-center justify-between">
+                    Laboratory Test
+                    <span class="transform transition-transform duration-300" id="laboratoryTestArrow">▼</span>
+                </button>
+                <ul id="laboratoryTestMenu" class="hidden pl-4 space-y-2">
+                    <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">Outpatient Request</a></li>
+                    <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">Serologic Test</a></li>
+                </ul>
+            </li>
+
+            <li>
+                <button onclick="toggleDropdown('uploadMenu')" class="w-full text-left hover:bg-[#0a47b5] p-2 rounded flex items-center justify-between">
+                    Upload
+                    <span class="transform transition-transform duration-300" id="uploadArrow">▼</span>
+                </button>
+                <ul id="uploadMenu" class="hidden pl-4 space-y-2">
+                    <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">Upload Chart</a></li>
+                    <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">Upload Lab Result</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#" class="hover:bg-[#0a47b5] p-2 rounded block">Prescription</a></li>
+        </ul>
+
+        <div id="user-profile" class="p-4 mt-auto bg-[#0a47b5] rounded-md flex items-center justify-between">
+            <div class="flex items-center">
+                <img src="https://i.imgur.com/DJ3zPA2.png" alt="User" class="w-10 h-10 rounded-full">
+                <span class="ml-2 text-white">John Doe</span>
+            </div>
+            <div id="logout-icon" class="cursor-pointer ml-4">
+                <img src="./assets/exit.svg" alt="Logout" class="w-6 h-6 text-white">
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="flex-1 md:ml-64 p-6">
+        <h1 class="text-3xl font-bold mb-6 bg-[rgb(11_87_208_/var(--tw-bg-opacity))] text-white p-4 rounded-md">Welcome to Your Dashboard</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <!-- Today's Appointment Section -->
+            <div class="bg-[#f0f8ff] p-4 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold">Today's Appointment</h2>
+                <div id="todays-appointment" class="mt-4">
+                    <!-- Today's appointment data, update dynamically if needed -->
+                    <p><strong>Sophia</strong> - 2024-11-15, 10:00 AM</p>
+                    <p>Status: <span class="text-green-500">Confirmed</span></p>
+                </div>
+            </div>
+
+            <!-- Upcoming Appointments Section -->
+            <div class="bg-[#f0f8ff] p-4 rounded-lg shadow-lg">
+                <h2 class="text-xl font-semibold">Upcoming Appointments</h2>
+                <div id="appointments-list" class="mt-4">
+                    <p><strong>John</strong> - 2024-11-17, 2:00 PM - <span class="text-red-500">Canceled</span></p>
+                </div>
+                <!-- Add Appointment Button -->
+                <button id="add-appointment-btn" class="mt-4 bg-[#0b57d0] text-white p-2 rounded-md w-full hover:bg-[#0a47d5]">
+                    Add Appointment
+                </button>
+            </div>
+        </div>
+
+        <!-- Recent Appointments Section -->
+        <div class="bg-[#f0f8ff] p-4 rounded-lg shadow-lg mt-6">
+            <h2 class="text-xl font-semibold">Recent Appointments</h2>
+            <div id="recent-appointments" class="mt-4">
+                <p><strong>Jane Doe</strong> - 2024-11-10</p>
+                <p><strong>Tom Lee</strong> - 2024-11-12</p>
+            </div>
+        </div>
+
+        <!-- Medical Alerts Section -->
+        <div class="bg-[#fff0f0] p-4 rounded-lg shadow-lg mt-6">
+            <h2 class="text-xl font-semibold">Medical Alerts</h2>
+
+            <!-- Reminder Table -->
+            <table class="w-full mt-4 border border-gray-300 rounded-md">
+                <thead class="bg-[#f0f8ff]">
+                    <tr>
+                        <th class="p-2 border-b">Reminder</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="p-2 border-b">Blood Pressure Check: 2024-11-20</td>
+                    </tr>
+                    <tr>
+                        <td class="p-2 border-b">Diabetes Follow-up: 2024-11-25</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Calendar Section -->
+        <div id="calendar" class="mt-6 h-90 w-70"></div>
+    </div>
+
+    <script>
+        // Calendar Initialization
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: [
+                    { title: 'Blood Pressure Check', date: '2024-11-20' },
+                    { title: 'Diabetes Follow-up', date: '2024-11-25' },
+                    { title: 'Appointment with Sophia', date: '2024-11-15' },
+                    { title: 'John\'s Appointment', date: '2024-11-17' }
+                ]
+            });
+            calendar.render();
+        });
+
+        // Toggle Sidebar on Mobile
+        document.getElementById('toggle-btn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('-translate-x-full');
+        });
+
+        document.getElementById('close-btn').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.add('-translate-x-full');
+        });
+
+        // Dropdown Menu Toggle Function
+        function toggleDropdown(menuId) {
+            const menu = document.getElementById(menuId);
+            menu.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
